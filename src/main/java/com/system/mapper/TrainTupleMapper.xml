@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.TrainTupleDao" >
+  <resultMap type="com.system.entity.ext.TrainTupleExt" id="TrainTupleExt"></resultMap>
+  <parameterMap id="TrainTupleExt" type="com.system.entity.ext.TrainTupleExt"></parameterMap>
+  <sql id="Base_Column_List" >
+    id, userId, placeId, count
+  </sql>
+  <sql id="resultColumns">
+    traintuple.ID AS id,
+    traintuple.userid AS userid,
+    traintuple.placeid AS placeid,
+    traintuple.count AS count,
+    mappedpoiinfo.city  as city,
+    mappedpoiinfo.longitude as longitude,
+    mappedpoiinfo.latitude as latitude,
+    mappedpoiinfo.roughFamily as roughFamily,
+    mappedpoiinfo.thinFamily as thinFamily
+  </sql>
+
+  <!--动态查询公用条件 -->
+  <sql id="dynamicCondition">
+    <if test="count !=null and count != ''">
+      AND traintuple.count like concat (concat ('%',#{count}),'%')
+    </if>
+    <if test="userid !=null and userid != ''">
+      AND traintuple.userid like concat (concat ('%',#{userid}),'%')
+    </if>
+    <if test="placeid !=null and placeid != ''">
+      AND traintuple.placeid like concat (concat ('%',#{placeid}),'%')
+    </if>
+    <if test="thinFamily !=null and thinFamily != ''">
+      AND mappedpoiinfo.thinFamily like concat (concat ('%',#{thinFamily}),'%')
+    </if>
+
+  </sql>
+
+  <select id="findList" resultMap="TrainTupleExt" parameterMap="TrainTupleExt">
+    SELECT
+    <include refid="resultColumns" />
+    FROM
+    train_tuple traintuple
+    LEFT JOIN mappedpoiinfo mappedpoiinfo
+    ON traintuple.placeId=mappedpoiinfo.placeId
+    WHERE
+    1=1
+    <include refid="dynamicCondition" />
+
+  </select>
+  <select id="selectByPrimaryKey" resultMap="TrainTupleExt" parameterType="java.lang.Integer" >
+    select 
+    <include refid="resultColumns" />
+    from train_tuple traintuple
+      LEFT JOIN mappedpoiinfo mappedpoiinfo
+      ON traintuple.placeId=mappedpoiinfo.placeId
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from train_tuple
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="TrainTupleExt" >
+    insert into train_tuple (id, userId, placeId, 
+      count)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{placeid,jdbcType=VARCHAR}, 
+      #{count,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="TrainTupleExt" >
+    insert into train_tuple
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="placeid != null" >
+        placeId,
+      </if>
+      <if test="count != null" >
+        count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="placeid != null" >
+        #{placeid,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="TrainTupleExt" >
+    update train_tuple
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="placeid != null" >
+        placeId = #{placeid,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        count = #{count,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="TrainTupleExt" >
+    update train_tuple
+    set userId = #{userid,jdbcType=VARCHAR},
+      placeId = #{placeid,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

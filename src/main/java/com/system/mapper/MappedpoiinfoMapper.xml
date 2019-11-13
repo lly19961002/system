@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.MappedpoiinfoDao" >
+  <resultMap id="BaseResultMap" type="com.system.entity.Mappedpoiinfo" >
+    <id column="placeId" property="placeid" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="roughFamily" property="roughfamily" jdbcType="VARCHAR" />
+    <result column="thinFamily" property="thinfamily" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    placeId, longitude, latitude, city, roughFamily, thinFamily
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mappedpoiinfo
+    where placeId = #{placeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mappedpoiinfo
+    where placeId = #{placeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.system.entity.Mappedpoiinfo" >
+    insert into mappedpoiinfo (placeId, longitude, latitude, 
+      city, roughFamily, thinFamily
+      )
+    values (#{placeid,jdbcType=INTEGER}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{roughfamily,jdbcType=VARCHAR}, #{thinfamily,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.entity.Mappedpoiinfo" >
+    insert into mappedpoiinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="placeid != null" >
+        placeId,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="roughfamily != null" >
+        roughFamily,
+      </if>
+      <if test="thinfamily != null" >
+        thinFamily,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="placeid != null" >
+        #{placeid,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="roughfamily != null" >
+        #{roughfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="thinfamily != null" >
+        #{thinfamily,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.entity.Mappedpoiinfo" >
+    update mappedpoiinfo
+    <set >
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="roughfamily != null" >
+        roughFamily = #{roughfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="thinfamily != null" >
+        thinFamily = #{thinfamily,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where placeId = #{placeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.entity.Mappedpoiinfo" >
+    update mappedpoiinfo
+    set longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      roughFamily = #{roughfamily,jdbcType=VARCHAR},
+      thinFamily = #{thinfamily,jdbcType=VARCHAR}
+    where placeId = #{placeid,jdbcType=INTEGER}
+  </update>
+</mapper>

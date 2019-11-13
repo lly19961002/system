@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.dao.UserDao">
+    <resultMap type="com.system.entity.User" id="User"></resultMap>
+    <parameterMap id="User" type="com.system.entity.User"></parameterMap>
+    <sql id="resultColumns">
+        user.ID AS id,
+        user.username AS username,
+        user.password AS password,
+        user.operator_num AS operatornum,
+        user.operator AS operator,
+        user.operator_date AS operatordate
+    </sql>
+
+    <!--动态查询公用条件 -->
+    <sql id="dynamicCondition">
+        <if test="id !=null and id != ''">
+            AND user.ID like concat (concat ('%',#{id}),'%')
+        </if>
+        <if test="username !=null and username != ''">
+            AND user.username like concat (concat ('%',#{username}),'%')
+        </if>
+
+    </sql>
+
+    <select id="findList" resultMap="User" parameterMap="User">
+        SELECT
+        <include refid="resultColumns" />
+        FROM
+        USER user
+        WHERE
+        1=1
+        <!--<include refid="dynamicCondition" />-->
+
+    </select>
+    <insert id="insertUser" parameterMap="User">
+        INSERT INTO user
+        (username,password,operator_num,operator)
+        VALUES (#{username},#{password},#{operatornum},#{operator})
+    </insert>
+
+    <select id="getPassword" parameterType="java.lang.String" resultType="java.lang.String">
+        select password from user where username=#{password}
+    </select>
+
+</mapper>
